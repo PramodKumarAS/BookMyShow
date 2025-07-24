@@ -1,36 +1,36 @@
 import React, { useEffect } from 'react'
 import { Button, Form, Input, message } from "antd";
 import { Link, useNavigate } from "react-router-dom";
-//import { loginUser } from '../../API/users'
+import { loginUser } from '../API/user'
 
 function Login() {
   const navigate = useNavigate()
   const [messageApi, context] = message.useMessage()
 
   const onFinishLoginForm = async (values) => {
-    // try {
-    //   const response = await loginUser(values)
+    try {
+      const response = await loginUser(values)
 
-    //   console.log({ response })
-    //   if (response.success) {
-    //     messageApi.success("Logged In successfully!")
-    //     localStorage.setItem("token", response.token)
+      console.log({ response })
+      if (response.success) {
+        messageApi.success("Logged In successfully!")
+        localStorage.setItem("token", response.token)
 
-    //     if (response.role === "Admin") {
-    //       return navigate("/home")
-    //     }
-    //     if (response.role === "Partner") {
-    //       return navigate("/partner")
-    //     }
+        if (response.role === "Admin") {
+          return navigate("/home")
+        }
+        if (response.role === "Partner") {
+          return navigate("/partner")
+        }
 
-    //     navigate("/User")
-    //   } else {
-    //     messageApi.error("Something went wrong!")
-    //   }
-    // } catch (error) {
-    //   messageApi.error("Something went wrong!")
-    //   console.log("error", error)
-    // }
+        navigate("/User")
+      } else {
+        messageApi.error("Something went wrong!")
+      }
+    } catch (error) {
+      messageApi.error("Something went wrong!")
+      console.log("error", error)
+    }
   }
 
   return (
@@ -84,6 +84,7 @@ function Login() {
                   Login
                 </Button>
               </Form.Item>
+
             </Form>
             <div>
               <p>
