@@ -18,7 +18,13 @@ const userSchemaRules = {
     phoneNumber:{
         type:String,
         require:true
-    }
+    },
+        
+    role: {
+        type: String,
+        required: false,
+        default: "User" // "Admin", "Partner", "User"
+    },
 };
 
 const userSchema = new mongoose.Schema(userSchemaRules);

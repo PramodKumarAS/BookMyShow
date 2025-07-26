@@ -2,6 +2,7 @@ const express=require("express");
 const userModel = require("../Model/users")
 const userRouter =  express.Router();
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 userRouter.post('/register',async(req,res)=>{
     try {
@@ -43,9 +44,13 @@ userRouter.post('/login',async (req,res)=>{
             });
         }
 
+        const token = jwt.sign({userId:user._id},process.env.JWT_SECRET,{expiresIn:"1d"});
+
         res.status(200).json({
             success:true,
+            token,
             message: "Successfully logged in!",
+            role: user.role
         });
     } catch (error) {
         res.status(500).json({

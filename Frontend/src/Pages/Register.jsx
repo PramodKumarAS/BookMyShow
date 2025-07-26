@@ -43,27 +43,27 @@ const Register = () => {
 
   const onFinishRegister = async (value) => {
 
-    // const {isAdmin, isPartner, ...restValues } = value
+    const {isAdmin, isPartner, ...restValues } = value
 
-    // if(isAdmin) {
-    //   restValues.role = "Admin"
-    // }
+    if(isAdmin) {
+      restValues.role = "Admin"
+    }
 
-    // if(isPartner) {
-    //   restValues.role = "Partner"
-    // }
+    if(isPartner) {
+      restValues.role = "Partner"
+    }
 
-    // try {
-    //     const response = await registerUser(restValues);
-    //     if(response.success){
-    //       messageApi.success("User Registration is successfull!!")
-    //       navigate('/login')
-    //     }else{
-    //       messageApi.error("Something went wrong!!")
-    //     }
-    // } catch (error) {
-    //     console.log("Registration failed:", error);
-    // }
+    try {
+        const response = await registerUser(restValues);
+        if(response.success){
+          messageApi.success("User Registration is successfull!!")
+          navigate('/login')
+        }else{
+          messageApi.error("Something went wrong!!")
+        }
+    } catch (error) {
+        console.log("Registration failed:", error);
+    }
 };
 
   return ( 

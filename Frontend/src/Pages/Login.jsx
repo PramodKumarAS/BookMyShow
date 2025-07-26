@@ -17,7 +17,7 @@ function Login() {
         localStorage.setItem("token", response.token)
 
         if (response.role === "Admin") {
-          return navigate("/home")
+          return navigate("/admin")
         }
         if (response.role === "Partner") {
           return navigate("/partner")
