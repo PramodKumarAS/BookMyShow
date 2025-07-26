@@ -13,6 +13,10 @@ app.use(cors())
 app.use('/api/user',userRouter);
 app.use('/api/movie',movieRouter);
 
+app.get('/', (req, res) => {
+  res.send('✅ Backend is running on Render');
+});
+
 const connectDB = require("./Config/db");
 connectDB();
 
