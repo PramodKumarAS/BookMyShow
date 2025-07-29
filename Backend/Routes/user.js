@@ -44,8 +44,12 @@ userRouter.post('/login',async (req,res)=>{
             });
         }
 
-        const token = jwt.sign({userId:user._id},process.env.JWT_SECRET,{expiresIn:"1d"});
-
+        const token = jwt.sign(
+        { userId: user._id, role: user.role }, // ✅ Include role here
+        process.env.JWT_SECRET,
+        { expiresIn: "1h" }
+        );
+        
         res.status(200).json({
             success:true,
             token,

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Checkbox, Form, Input, Radio, message } from 'antd';
-//import { registerUser } from '../../API/users';
+import { registerUser } from '../API/user';
 import {useNavigate} from 'react-router-dom';
 
 const formItemLayout = {
@@ -9,7 +9,7 @@ const formItemLayout = {
       span: 24,
     },
     sm: {
-      span: 8,
+      span: 11,
     },
   },
   wrapperCol: {
@@ -70,7 +70,7 @@ const Register = () => {
         <>
             {contextHolder}
 
-            <Form
+            <Form  
               {...formItemLayout}
               form={form}
               name="register"

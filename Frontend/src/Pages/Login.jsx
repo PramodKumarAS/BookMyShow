@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react'
 import { Button, Form, Input, message } from "antd";
 import { Link, useNavigate } from "react-router-dom";
-import { loginUser } from '../API/user'
+import { loginUser } from '../API/user';
+import { jwtDecode } from "jwt-decode";
 
 function Login() {
   const navigate = useNavigate()
@@ -16,6 +17,9 @@ function Login() {
         messageApi.success("Logged In successfully!")
         localStorage.setItem("token", response.token)
 
+        const decodedToken = jwtDecode(response.token);
+        localStorage.setItem('user', JSON.stringify(decodedToken)); 
+
         if (response.role === "Admin") {
           return navigate("/admin")
         }
@@ -23,7 +27,7 @@ function Login() {
           return navigate("/partner")
         }
 
-        navigate("/User")
+        navigate("/user")
       } else {
         messageApi.error("Something went wrong!")
       }
@@ -37,7 +41,7 @@ function Login() {
     <>
       {context}
       <header className="App-header" style={{backgroundColor:"white"}}>
-        <main className="main-area mw-500 text-center px-3">
+        <main className="main-area mw-500 text-center px-3" style={{ maxWidth: '400px', margin: '100px auto' }}>
           <section className="left-section" >
             <img src="https://logodix.com/logo/2011039.png" alt="" style={{width:"400px",height:"250px",borderRadius:"20px"}} />
           </section>

@@ -6,7 +6,7 @@ import { message, Row, Col, Input } from "antd";
 import { useNavigate } from "react-router-dom";
 import { SearchOutlined } from "@ant-design/icons";
 
-const Home = () => {
+const User = () => {
   //const user = useSelector((state) => state.users);
   const [movies, setMovies] = useState(null);
   const [searchText, setSearchText] = useState("");
@@ -111,4 +111,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default User;
