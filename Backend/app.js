@@ -3,6 +3,7 @@ const dotenv = require('dotenv')
 const app = express();
 const userRouter = require('./Routes/user')
 const movieRouter = require('./Routes/movie');
+const theatreRouter = require('./Routes/theatre');
 const cors = require("cors");
 
 dotenv.config();
@@ -12,6 +13,7 @@ app.use(cors())
 
 app.use('/api/user',userRouter);
 app.use('/api/movie',movieRouter);
+app.use('/api/theatre',theatreRouter);
 
 app.get('/', (req, res) => {
   res.send('✅ Backend is running on Render');

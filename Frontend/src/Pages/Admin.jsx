@@ -1,7 +1,7 @@
 import React from 'react';
 import { Tabs } from 'antd';
 import MovieList from './MovieList';
-//import TheatresTable from './TheatresTable';
+import TheatresTable from './TheatresTable';
 
 function Admin() {
     
@@ -14,7 +14,7 @@ function Admin() {
         {
             key: '2',
             label: 'Theatres',
-            //children: <TheatresTable />
+            children: <TheatresTable />
         }
     ];
 
