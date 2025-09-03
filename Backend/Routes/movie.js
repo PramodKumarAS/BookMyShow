@@ -78,4 +78,23 @@ movieRouter.get('/get-all-movies',authMiddleware, async(req,res)=>{
     }
 });
 
+movieRouter.get('/:id',authMiddleware, async(req,res)=>{
+    try {
+        const movie = await movieModels.findById(req.params.id);
+
+        res.send({
+            success: true,
+            message: "Movies fetched!",
+            movie
+        })
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({
+            success: false,
+            message: "Internal Server Error"
+        })        
+    }
+});
+
+
 module.exports = movieRouter;

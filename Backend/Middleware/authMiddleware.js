@@ -6,8 +6,11 @@ function authMiddleware(req,res,next){
 
         const verifiedToken = jwt.verify(token,process.env.JWT_SECRET);
 
+        req.userId = verifiedToken.userId;
+
         next()
     } catch (error) {
+        console.log("Started",error)
         res.status(401).send({
             success: false,
             message: "Invalid token! Please try logging in again."

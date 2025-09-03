@@ -36,9 +36,21 @@ const getAllMovies = async(value)=>{
     }
 };
 
+const getMovieById = async(id)=>{
+    try {
+        const movies = await axiosInstance.get(`/api/movie/${id}`);
+        return movies.data;
+    } catch (error) {
+        console.log(error)
+        throw error;
+    }
+};
+
+
 export{
     addMovie,
     updateMovie,   
     deleteMovie, 
-    getAllMovies
+    getAllMovies,
+    getMovieById
 }

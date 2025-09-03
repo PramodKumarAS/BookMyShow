@@ -8,140 +8,149 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
+import { getCurrentUser } from "../API/user";
+import { useDispatch, useSelector } from "react-redux";
+import { hideLoading, showLoading } from "../Redux/loaderSlice";
+import { setUser } from "../Redux/userSlice";
 
 function ProtectedRoute({ children, allowedRoles }) {
+  const LoggedUser = useSelector((state) => state.users.user); // pick user directly
   const navigate = useNavigate();
-  const [authorized, setAuthorized] = useState(null); // null = loading
+  const dispatch = useDispatch();
+  const [authorized, setAuthorized] = useState(null);
 
-  // Mock user for menu, better to get from state or localStorage parsed user
-  // You can improve this to get from localStorage as below
-  let user;
-  try {
-    user = JSON.parse(localStorage.getItem("user"));
-  } catch {
-    user = null;
-  }
-
-  const navItems = [
-    {
-      label: `Pramod`,
-      key: "user-menu",
-      icon: <UserOutlined />,
-      children: [
-        {
-          label: (
-            <span
-              onClick={() => {
-                if (user?.isAdmin) {
-                  navigate("/admin");
-                } else if (user?.isPartner) {
-                  navigate("/partner");
-                } else {
-                  navigate("/profile");
-                }
-              }}
-            >
-              My Profile
-            </span>
-          ),
-          key: "profile",
-          icon: <ProfileOutlined />,
-        },
-        {
-          label: (
-            <Link
-              to="/login"
-              onClick={() => {
-                localStorage.removeItem("token");
-                localStorage.removeItem("user");
-              }}
-            >
-              Log Out
-            </Link>
-          ),
-          key: "logout",
-          icon: <LogoutOutlined />,
-        },
-      ],
-    },
-  ];
-
+  // 🔹 Hydrate Redux from localStorage on mount
   useEffect(() => {
-    const token = localStorage.getItem("token");
     const userStr = localStorage.getItem("user");
-
-    if (!token || !userStr) {
-      setAuthorized(false);
-      return;
+    if (userStr) {
+      try {
+        const parsedUser = JSON.parse(userStr);
+        dispatch(setUser(parsedUser));
+      } catch {
+        localStorage.removeItem("user");
+      }
     }
+  }, [dispatch]);
 
-    let parsedUser = null;
+  // 🔹 Fetch user from API and validate role
+  const getValidUser = async () => {
     try {
-      parsedUser = JSON.parse(userStr);
-    } catch (e) {
-      console.error("Failed to parse user from localStorage", userStr);
+      dispatch(showLoading());
+      const response = await getCurrentUser();
+
+      //localStorage.setItem("user", JSON.stringify(response.user)); // keep storage in sync
+      dispatch(setUser(response.user));
+
+      if (allowedRoles.includes(response.user.role)) {
+        setAuthorized(true);
+      } else {
+        setAuthorized(false);
+      }
+    } catch (error) {
+      dispatch(setUser(null));
       localStorage.removeItem("user");
       setAuthorized(false);
-      return;
+      message.error(error.message);
+      navigate("/login");
+    } finally {
+      dispatch(hideLoading());
     }
+  };
 
-    if (!allowedRoles.includes(parsedUser.role)) {
+  // 🔹 Run validation only on mount
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
       setAuthorized(false);
+      navigate("/login");
       return;
     }
-
-    // user is authorized
-    setAuthorized(true);
-  }, [allowedRoles]);   
+    getValidUser();
+  }, [allowedRoles]);
 
   if (authorized === null) {
-    // loading state, you can return a spinner here
-    return null;
+    return <div>Loading...</div>; // spinner
   }
 
   if (authorized === false) {
-    // Instead of redirecting, just show a message on UI
     return (
-        <div style={{ padding: 24, textAlign: 'center', marginTop: 50 }}>
+      <div style={{ padding: 24, textAlign: "center", marginTop: 50 }}>
         <h1>403 - Not Authorized</h1>
         <p>You do not have permission to view this page.</p>
-        </div>
+      </div>
     );
   }
 
-  // authorized === true: render children inside layout
+  // Authorized === true
   return (
-    <div style={{ width: "100%", margin: 0, padding: 0 }}>
-      <Layout>
-        <Header
-          className="d-flex justify-content-between"
-          style={{
-            position: "sticky",
-            top: 0,
-            zIndex: 1,
-            width: "100%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-evenly",
-          }}
-        >
-          <h3 className="demo-logo text-white m-0" style={{ color: "white" }}>
-            Book Our Show
-          </h3>
-          <Menu
-            theme="dark"
-            mode="horizontal"
-            items={navItems}
-            style={{ minWidth: "400px" }}
-          />
-        </Header>
-        <div
-          style={{ padding: 24, height: "90vh", width: "100%", background: "#fff" }}
-        >
-          {children}
-        </div>
-      </Layout>
-    </div>
+    <Layout>
+      <Header
+        className="d-flex justify-content-between"
+        style={{
+          position: "sticky",
+          top: 0,
+          zIndex: 1,
+          width: "100%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-evenly",
+        }}
+      >
+        <h3 className="demo-logo text-white m-0">Book Our Show</h3>
+        <Menu
+          theme="dark"
+          mode="horizontal"
+          style={{ minWidth: "400px" }}
+          items={[
+            {
+              label: `${LoggedUser?.name || ""}`,
+              key: "user-menu",
+              icon: <UserOutlined />,
+              children: [
+                {
+                  label: (
+                    <span
+                      onClick={() => {
+                        if (LoggedUser?.isAdmin) {
+                          navigate("/admin");
+                        } else if (LoggedUser?.isPartner) {
+                          navigate("/partner");
+                        } else {
+                          navigate("/profile");
+                        }
+                      }}
+                    >
+                      My Profile
+                    </span>
+                  ),
+                  key: "profile",
+                  icon: <ProfileOutlined />,
+                },
+                {
+                  label: (
+                    <Link
+                      to="/login"
+                      onClick={() => {
+                        localStorage.removeItem("token");
+                        localStorage.removeItem("user");
+                        dispatch(setUser(null));
+                      }}
+                    >
+                      Log Out
+                    </Link>
+                  ),
+                  key: "logout",
+                  icon: <LogoutOutlined />,
+                },
+              ],
+            },
+          ]}
+        />
+      </Header>
+      <div style={{ padding: 24, height: "90vh", background: "#fff" }}>
+        {children}
+      </div>
+    </Layout>
   );
 }
 

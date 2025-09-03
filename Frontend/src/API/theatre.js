@@ -18,6 +18,16 @@ const updateTheatre =  async(value)=>{
     }
 };
 
+
+const deleteTheatre =  async(value)=>{
+    try {
+        const theatre =await axiosInstance.post('/api/theatre/delete-theatre',value);
+        return theatre.data;
+    } catch (error) {
+        throw error;
+    }
+};
+
 const getAllTheatres =  async(value)=>{
     try {
         const theatre =await axiosInstance.get('/api/theatre/get-all-theatre',value);
@@ -27,8 +37,19 @@ const getAllTheatres =  async(value)=>{
     }
 };
 
+const getTheatresByOwner =  async(value)=>{
+    try {
+        const theatre =await axiosInstance.get(`/api/theatre/get-theatres-ByOwner/${value.owner}`);
+        return theatre.data;
+    } catch (error) {
+        throw error;
+    }
+};
+
 export {
     addTheatre,
     updateTheatre,
-    getAllTheatres
+    deleteTheatre,
+    getAllTheatres,
+    getTheatresByOwner
 }

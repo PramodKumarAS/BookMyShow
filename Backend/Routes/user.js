@@ -3,6 +3,7 @@ const userModel = require("../Model/users")
 const userRouter =  express.Router();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const authMiddleware = require("../Middleware/authMiddleware");
 
 userRouter.post('/register',async(req,res)=>{
     try {
@@ -61,6 +62,35 @@ userRouter.post('/login',async (req,res)=>{
             success: false, 
             message:error.message || "Internal Server Error!!",
         });
+    }
+});
+
+userRouter.get('/get-currentUser',authMiddleware, async (req, res) => {
+
+    try {
+
+        const userId=req.userId;
+
+        if (!userId) {
+            return res.status(500).send({
+                success: false,
+                message: "Something went wrong! Try again"
+            })
+        }
+
+        const user = await userModel.findById(userId).select("-password");
+    
+        res.status(200).send({
+            success:true,
+            user
+        });  
+
+    } catch (error) {
+        res.status(500).send({
+            success:false,
+            message: "Internal Server Error!!",
+        });        
+
     }
 });
 

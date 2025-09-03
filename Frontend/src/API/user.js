@@ -18,7 +18,18 @@ const loginUser = async(value)=>{
     }
 };
 
+const getCurrentUser = async(value)=>{
+    try {
+        const response = await axiosInstance.get('/api/user/get-currentUser',value);
+        return response.data;
+    } catch (error) {
+        console.log("ohh yea",error)
+        throw error;
+    }
+};
+
 export{
     registerUser,
-    loginUser
+    loginUser,
+    getCurrentUser
 }
