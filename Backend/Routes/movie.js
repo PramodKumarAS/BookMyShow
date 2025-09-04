@@ -44,7 +44,6 @@ movieRouter.post('/update-movie',authMiddleware,async(req,res)=>{
 
 movieRouter.post('/delete-movie',authMiddleware,async(req,res)=>{
     try {
-        console.log("dele",req.body);
        await movieModels.findByIdAndDelete(req.body._id);
               
         res.status(200).json({

@@ -5,6 +5,7 @@ const userRouter = require('./Routes/user')
 const movieRouter = require('./Routes/movie');
 const theatreRouter = require('./Routes/theatre');
 const showRouter = require('./Routes/show');
+const bookingRouter = require('./Routes/booking');
 
 const cors = require("cors");
 
@@ -17,6 +18,8 @@ app.use('/api/user',userRouter);
 app.use('/api/movie',movieRouter);
 app.use('/api/theatre',theatreRouter);
 app.use('/api/show',showRouter);
+app.use('/api/book',bookingRouter);
+
 
 app.get('/', (req, res) => {
   res.send('✅ Backend is running on Render');

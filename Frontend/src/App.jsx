@@ -8,6 +8,9 @@ import Partner from './Pages/Partner'
 import { Provider } from 'react-redux'
 import store from './Redux/store'
 import SingleMovie from './Pages/SingleMovie'
+import BookShow from './Pages/BookShow'
+import './App.css'
+import Profile from './Pages/Profile'
 
 function App() {
   return (
@@ -19,7 +22,9 @@ function App() {
           <Route path='/user' element={<ProtectedRoute allowedRoles={['User']}><User/></ProtectedRoute>} />
           <Route path='/admin' element={<ProtectedRoute allowedRoles={['Admin']}><Admin/></ProtectedRoute>} />
           <Route path='/partner' element={<ProtectedRoute allowedRoles={['Partner']}><Partner/></ProtectedRoute>} />
+          <Route path='/profile' element={<ProtectedRoute allowedRoles={['User']}><Profile/></ProtectedRoute>} />
           <Route path="/movie/:id" element={<ProtectedRoute allowedRoles={['User']}><SingleMovie /></ProtectedRoute>} />
+          <Route path="/book-show/:id" element={<ProtectedRoute allowedRoles={['User']}><BookShow /></ProtectedRoute>} />
         </Routes>
      </BrowserRouter> 
     </Provider>
