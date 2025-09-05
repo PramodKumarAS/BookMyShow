@@ -11,6 +11,8 @@ import SingleMovie from './Pages/SingleMovie'
 import BookShow from './Pages/BookShow'
 import './App.css'
 import Profile from './Pages/Profile'
+import Forget from './Pages/Forget'
+import Reset from './Pages/Reset'
 
 function App() {
   return (
@@ -25,6 +27,8 @@ function App() {
           <Route path='/profile' element={<ProtectedRoute allowedRoles={['User']}><Profile/></ProtectedRoute>} />
           <Route path="/movie/:id" element={<ProtectedRoute allowedRoles={['User']}><SingleMovie /></ProtectedRoute>} />
           <Route path="/book-show/:id" element={<ProtectedRoute allowedRoles={['User']}><BookShow /></ProtectedRoute>} />
+          <Route path='/forget' element={<Forget/>} />
+          <Route path='/reset' element={<Reset/>} />
         </Routes>
      </BrowserRouter> 
     </Provider>

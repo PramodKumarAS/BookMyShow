@@ -1,25 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, Navigate } from "react-router-dom";
-import { message, Layout, Menu } from "antd";
-import { Header } from "antd/es/layout/layout";
-import {
-  LogoutOutlined,
-  ProfileOutlined,
-  UserOutlined,
-} from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
+import { message, Layout, Menu, Spin, Typography } from "antd";
+import { LogoutOutlined, ProfileOutlined, UserOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import { getCurrentUser } from "../API/user";
 import { useDispatch, useSelector } from "react-redux";
 import { hideLoading, showLoading } from "../Redux/loaderSlice";
 import { setUser } from "../Redux/userSlice";
 
+const { Header, Content } = Layout;
+const { Title, Paragraph } = Typography;
+
 function ProtectedRoute({ children, allowedRoles }) {
-  const LoggedUser = useSelector((state) => state.users.user); // pick user directly
+  const LoggedUser = useSelector((state) => state.users.user);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [authorized, setAuthorized] = useState(null);
 
-  // 🔹 Hydrate Redux from localStorage on mount
+  // Hydrate Redux from localStorage on mount
   useEffect(() => {
     const userStr = localStorage.getItem("user");
     if (userStr) {
@@ -32,13 +30,11 @@ function ProtectedRoute({ children, allowedRoles }) {
     }
   }, [dispatch]);
 
-  // 🔹 Fetch user from API and validate role
+  // Fetch user from API and validate role
   const getValidUser = async () => {
     try {
       dispatch(showLoading());
       const response = await getCurrentUser();
-
-      //localStorage.setItem("user", JSON.stringify(response.user)); // keep storage in sync
       dispatch(setUser(response.user));
 
       if (allowedRoles.includes(response.user.role)) {
@@ -57,7 +53,6 @@ function ProtectedRoute({ children, allowedRoles }) {
     }
   };
 
-  // 🔹 Run validation only on mount
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -69,38 +64,57 @@ function ProtectedRoute({ children, allowedRoles }) {
   }, [allowedRoles]);
 
   if (authorized === null) {
-    return <div>Loading...</div>; // spinner
+    return (
+      <div style={{ height: "100vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
+        <Spin size="large" tip="Validating user..." />
+      </div>
+    );
   }
 
   if (authorized === false) {
     return (
-      <div style={{ padding: 24, textAlign: "center", marginTop: 50 }}>
-        <h1>403 - Not Authorized</h1>
-        <p>You do not have permission to view this page.</p>
+      <div style={{ padding: 50, textAlign: "center" }}>
+        <Title level={2} style={{ color: "#ff4d4f" }}>403 - Not Authorized</Title>
+        <Paragraph>You do not have permission to view this page.</Paragraph>
       </div>
     );
   }
 
   // Authorized === true
   return (
-    <Layout>
+    <Layout style={{ minHeight: "100vh" }}>
       <Header
-        className="d-flex justify-content-between"
         style={{
           position: "sticky",
           top: 0,
-          zIndex: 1,
+          zIndex: 10,
           width: "100%",
           display: "flex",
           alignItems: "center",
-          justifyContent: "space-evenly",
+          justifyContent: "space-between",
+          padding: "0 24px",
+          background: "linear-gradient(90deg, #0d0d0d, #1a1a1a, #3a0ca3, #7209b7)", // 🎨 gradient
+          boxShadow: "0 2px 8px rgba(0,0,0,0.5)",
         }}
       >
-        <h3 className="demo-logo text-white m-0">Book Our Show</h3>
+        <h2
+          style={{
+            color: "#fff",
+            margin: 0,
+            fontWeight: "bold",
+            letterSpacing: "1px",
+            textShadow: "0 2px 4px rgba(0,0,0,0.5)",
+          }}
+        >
+          🎬 Book Our Show
+        </h2>
         <Menu
           theme="dark"
           mode="horizontal"
-          style={{ minWidth: "400px" }}
+          style={{
+            borderBottom: "none",
+            background: "transparent", // transparent to let gradient show
+          }}
           items={[
             {
               label: `${LoggedUser?.name || ""}`,
@@ -147,9 +161,20 @@ function ProtectedRoute({ children, allowedRoles }) {
           ]}
         />
       </Header>
-      <div style={{ padding: 24, height: "90vh", background: "#fff" }}>
-        {children}
-      </div>
+      <Content style={{ padding: "24px", background: "#0f0f0f" }}>
+        <div
+          style={{
+            background: "#cedcd8ff",
+            padding: 24,
+            borderRadius: 12,
+            minHeight: "80vh",
+            boxShadow: "0 4px 12px rgba(0,0,0,0.4)",
+            color: "#000000ff",
+          }}
+        >
+          {children}
+        </div>
+      </Content>
     </Layout>
   );
 }

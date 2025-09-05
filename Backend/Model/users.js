@@ -25,6 +25,14 @@ const userSchemaRules = {
         required: false,
         default: "User" // "Admin", "Partner", "User"
     },
+
+    otp: {
+        type: String
+    },
+  
+    otpExpiry: {
+        type: Date
+    },    
 };
 
 const userSchema = new mongoose.Schema(userSchemaRules);

@@ -117,8 +117,14 @@ function MovieList() {
   return (
     <>
       <div className="d-flex justify-content-end">
-        <Button
-          onClick={() => {
+        <Button type="primary"
+                shape="round"
+                size="large"                                         
+                style={{background: "linear-gradient(90deg, #ff512f, #dd2476)",
+                        border: "none",
+                        boxShadow: "0 3px 6px rgba(0,0,0,0.3)",
+                        fontWeight: 500,}}
+         onClick={() => {
             setIsModalOpen(true);
             setFormType("add");
           }}

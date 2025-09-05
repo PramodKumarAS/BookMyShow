@@ -1,9 +1,8 @@
 import { Col, Modal, Row, Form, Input, Select, Button, message } from 'antd';
 import TextArea from 'antd/es/input/TextArea';
-//import { showLoading, hideLoading } from '../Redux/loaderSlice';
-//import { useDispatch } from 'react-redux';
+import { showLoading, hideLoading } from '../Redux/loaderSlice';
+import { useDispatch } from 'react-redux';
 import { addMovie,updateMovie } from '../API/movies';
-// import moment from 'moment';
 
 const MovieForm = ({ isModalOpen, setIsModalOpen, selectedMovie, setSelectedMovie, formType, getData }) => {
   //const dispatch = useDispatch();
@@ -30,9 +29,9 @@ const MovieForm = ({ isModalOpen, setIsModalOpen, selectedMovie, setSelectedMovi
         message.error(response.message);
       }
       setSelectedMovie(null);
-      //dispatch(hideLoading());
+      dispatch(hideLoading());
     } catch (err) {
-      //dispatch(hideLoading());
+      dispatch(hideLoading());
       message.error(err.message);
     }
   };
@@ -76,11 +75,11 @@ const MovieForm = ({ isModalOpen, setIsModalOpen, selectedMovie, setSelectedMovi
                     placeholder="Select Language"
                     options={[
                       { value: 'English', label: 'English' },
-                      { value: 'Hindi', label: 'Hindi' },
-                      { value: 'Punjabi', label: 'Punjabi' },
+                      { value: 'Kannada', label: 'Kannada' },
+                      { value: 'Tamil', label: 'Tamil' },
+                      { value: 'Malyalam', label: 'Malyalam' }, 
                       { value: 'Telugu', label: 'Telugu' },
-                      { value: 'Bengali', label: 'Bengali' },
-                      { value: 'German', label: 'German' },
+                      { value: 'Hindi', label: 'Hindi' },
                     ]}
                   />
                 </Form.Item>
@@ -97,9 +96,7 @@ const MovieForm = ({ isModalOpen, setIsModalOpen, selectedMovie, setSelectedMovi
               <Col span={8}>
                 <Form.Item label="Select Movie Genre" name="genre" rules={[{ required: true, message: "Movie genre is required!" }]}>
                   <Select
-                    placeholder
-
-="Select Movie"
+                    placeholder="Select Movie"
                     options={[
                       { value: 'Action', label: 'Action' },
                       { value: 'Comedy', label: 'Comedy' },
