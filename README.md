@@ -1,7 +1,7 @@
 # 🎬 BookMyShow Clone (MERN Stack)
 
-A full-stack clone of the **BookMyShow** application built using the **MERN stack** (MongoDB, Express.js, React.js, Node.js).  
-This project allows users to browse movies, view details, select seats, and book tickets – similar to the real BookMyShow app.
+A full-stack **BookMyShow clone** built using the **MERN stack** (MongoDB, Express.js, React.js, Node.js).  
+This application supports a **3-user model**: **Admin, Partner, and User**, enabling end-to-end movie ticket booking with role-based functionalities.
 
 https://bookmyshow0101.netlify.app/login
 ---
