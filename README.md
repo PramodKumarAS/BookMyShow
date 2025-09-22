@@ -25,3 +25,47 @@ This project allows users to browse movies, view details, select seats, and book
 ---
 
 ## 📂 Project Structure
+/frontend -> React frontend
+/backend -> Express backend
+/models -> MongoDB models
+/routes -> API routes
+/config -> Environment & DB configs
+
+
+
+---
+
+## ⚙️ Installation & Setup
+
+### 1️⃣ Clone the repository
+```bash
+git clone https://github.com/your-username/bookmyshow-clone.git
+cd bookmyshow-clone
+
+# Install server dependencies
+cd backend
+npm install
+
+# Install client dependencies
+cd frontend
+npm install
+
+3️⃣ Setup environment variables
+
+Create a .env file inside the server folder:
+PORT=5000
+MONGO_URI=your_mongodb_connection_string
+JWT_SECRET=your_jwt_secret
+PAYMENT_KEY=your_payment_gateway_key 
+
+4️⃣ Run the project
+# Start backend
+cd server
+npm run dev
+
+# Start frontend
+cd ../client
+npm start
+
+
+
