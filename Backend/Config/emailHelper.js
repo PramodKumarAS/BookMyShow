@@ -18,12 +18,12 @@ function replaceContent(content, creds) {
 }
 
 
-async function emailHelper(templateName, reciverEmail, creds) {
+async function emailHelper(templateName, recieverEmail, creds) {
     try {
         const templatePath = path.join(__dirname, templateName);
         let content = await fs.promises.readFile(templatePath, "utf-8");
         const emailDetails = {
-            to: reciverEmail,
+            to: recieverEmail,
             from: 'tarashankar.chakraborty_1@scaler.com',
             subject: 'Mail from ScalerShows',
             text: `Hi ${creds.name} this your reset otp ${creds.otp}`,
@@ -45,7 +45,6 @@ async function emailHelper(templateName, reciverEmail, creds) {
     } catch (err) {
         console.log(err)
     }
-
 }
 
 module.exports = emailHelper;

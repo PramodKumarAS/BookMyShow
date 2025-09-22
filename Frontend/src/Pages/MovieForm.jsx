@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import { addMovie,updateMovie } from '../API/movies';
 
 const MovieForm = ({ isModalOpen, setIsModalOpen, selectedMovie, setSelectedMovie, formType, getData }) => {
-  //const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
   if (selectedMovie) {
     selectedMovie.releaseDate = new Date(selectedMovie.releaseDate).toISOString().split('T')[0]
@@ -13,7 +13,7 @@ const MovieForm = ({ isModalOpen, setIsModalOpen, selectedMovie, setSelectedMovi
 
   const onFinish = async (values) => {
     try {
-      //dispatch(showLoading());
+      dispatch(showLoading());
       let response = null;
       if (formType === "add") {
           response = await addMovie(values);

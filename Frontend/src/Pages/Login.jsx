@@ -4,6 +4,7 @@ import { Button, Form, Input, message, Typography } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import { loginUser } from "../API/user";
 import { jwtDecode } from "jwt-decode";
+import { UserOutlined, MailOutlined, LockOutlined } from "@ant-design/icons";
 
 const { Title } = Typography;
 
@@ -36,7 +37,7 @@ export default function Login() {
         messageApi.error("Invalid email or password!");
       }
     } catch (error) {
-      messageApi.error("Something went wrong!");
+      messageApi.error("Invalid email or password!");
       console.log("error", error);
     }
   };
@@ -88,8 +89,10 @@ export default function Login() {
               label="Email"
               rules={[{ required: true, message: "Please enter your email!" }]}
             >
-              <Input placeholder="Enter your email" />
-            </Form.Item>
+                <Input
+                  placeholder="Enter your email"
+                  prefix={<MailOutlined />}
+                />            </Form.Item>
 
             <Form.Item
               name="password"

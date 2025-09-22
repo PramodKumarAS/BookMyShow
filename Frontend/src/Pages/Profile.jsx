@@ -1,35 +1,55 @@
-import React, { useState } from "react";
-import { Card, Avatar, Tabs, List, Button, Form, Input } from "antd";
-import { UserOutlined, SettingOutlined, VideoCameraOutlined } from "@ant-design/icons";
+import React, { useState, useEffect } from "react";
+import { Card, Avatar, Tabs, List, Button, Form, Input, message, Modal } from "antd";
+import { UserOutlined, SettingOutlined, VideoCameraOutlined,MailOutlined } from "@ant-design/icons";
 import { useSelector } from "react-redux";
 import { getAllBookings } from "../API/book";
 
 const { TabPane } = Tabs;
 
 const Profile = () => {
+  const users = useSelector((state) => state.users);
+
   const [user, setUser] = useState({
-    avatar: null,
+    avatar: "https://tse2.mm.bing.net/th/id/OIP.LJq0q7abuN6zg3U3EiWj2QAAAA?pid=Api&P=0&h=180",
+    name: users.user.name,
+    email: users.user.email,
   });
 
-  const users = useSelector((state)=>state.users);
+  const [bookings, setBookings] = useState([]);
+  const [selectedBooking, setSelectedBooking] = useState(null);
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
-  const getallBooking = ()=>{
-        
-    const at =  getAllBookings();
-    console.log(at);
+  // Fetch bookings from API on mount
+  useEffect(() => {
+    const fetchBookings = async () => {
+      try {
+        const response = await getAllBookings();
+        if (response && response.data) {
+          setBookings(response.data);
+        }
+      } catch (error) {
+        console.error("Failed to fetch bookings:", error);
+      }
+    };
+    fetchBookings();
+  }, []);
+
+  const onFinish = async (values) => {
+    setUser({ ...user, ...values });
+    message.success({
+      content: "Profile updated successfully!",
+      duration: 2,
+    });
   };
 
-  const bookings = [
-    { id: 1, movie: "Jawan", date: "2025-09-05", seats: ["A1", "A2"] },
-    { id: 2, movie: "Leo", date: "2025-08-20", seats: ["B5"] },
-    { id: 3, movie: "Pushpa 2", date: "2025-08-10", seats: ["C3", "C4"] },
-  ];
+  const showTicket = (booking) => {
+    setSelectedBooking(booking);
+    setIsModalVisible(true);
+  };
 
-  const onFinish =async (values) => {
-        const at =await  getAllBookings();
-        console.log(at.data);
-
-    //setUser({ ...user, ...values });
+  const handleModalClose = () => {
+    setIsModalVisible(false);
+    setSelectedBooking(null);
   };
 
   return (
@@ -38,12 +58,12 @@ const Profile = () => {
       <Card style={{ marginBottom: 20 }}>
         <Card.Meta
           avatar={<Avatar size={64} icon={<UserOutlined />} src={user.avatar} />}
-          title={users.user.name}
-          description={users.user.email}
+          title={user.name}
+          description={user.email}
         />
       </Card>
 
-      {/* Tabs for profile sections */}
+      {/* Tabs */}
       <Tabs defaultActiveKey="1">
         {/* My Bookings */}
         <TabPane
@@ -60,15 +80,48 @@ const Profile = () => {
             dataSource={bookings}
             renderItem={(item) => (
               <List.Item
-                actions={[<Button type="link">View Ticket</Button>]}
+                actions={[
+                  <Button type="link" onClick={() => showTicket(item)}>
+                    View Ticket
+                  </Button>,
+                ]}
               >
                 <List.Item.Meta
-                  title={item.movie}
-                  description={`Date: ${item.date} | Seats: ${item.seats.join(", ")}`}
+                  title={item.show.movie?.movieName}
+                  description={`Date: ${item.show.date.split("T")[0]} | Seats: ${item.seats?.join(", ")}`}
                 />
               </List.Item>
             )}
           />
+
+          {/* Ticket Modal */}
+          <Modal
+            open={isModalVisible}
+            onCancel={handleModalClose}
+            footer={[
+              <Button key="close" onClick={handleModalClose}>
+                Close
+              </Button>,
+            ]}
+            title="Booking Details"
+          >
+            {selectedBooking && (
+              <Card>
+                <p>
+                  <strong>Movie:</strong> {selectedBooking.show.movie?.movieName}
+                </p>
+                <p>
+                  <strong>Date:</strong> {selectedBooking.show.date.split("T")[0]}
+                </p>
+                <p>
+                  <strong>Seats:</strong> {selectedBooking.seats?.join(", ")}
+                </p>
+                <p>
+                  <strong>User:</strong> {user.name}
+                </p>
+              </Card>
+            )}
+          </Modal>
         </TabPane>
 
         {/* Settings */}
@@ -87,10 +140,17 @@ const Profile = () => {
             onFinish={onFinish}
             style={{ maxWidth: 400 }}
           >
+            <Form.Item label={<span style={{ color: "#000" }}>Name</span>} name="name">
+              <Input prefix={<UserOutlined />} style={{ color: "#000" }} />
+            </Form.Item>
+
+            <Form.Item label={<span style={{ color: "#000" }}>Email</span>} name="email">
+              <Input prefix={<MailOutlined />} style={{ color: "#000" }} />
+            </Form.Item>
 
             <Form.Item>
               <Button type="primary" htmlType="submit">
-                Change the theme
+                Update Profile
               </Button>
             </Form.Item>
           </Form>

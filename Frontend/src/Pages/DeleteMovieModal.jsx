@@ -1,11 +1,11 @@
 import { Modal, Button, message } from 'antd';
-//import { showLoading, hideLoading } from '../Redux/loaderSlice';
-//import { useDispatch } from 'react-redux';
+import { showLoading, hideLoading } from '../Redux/loaderSlice';
+import { useDispatch } from 'react-redux';
 import { deleteMovie} from '../API/movies';
 
 const DeleteMovieModal = ({ isDeleteModalOpen, selectedMovie, setIsDeleteModalOpen, setSelectedMovie, getData }) => {
   
-  //const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
   if (selectedMovie) {
     selectedMovie.releaseDate = new Date(selectedMovie.releaseDate).toISOString().split('T')[0]
@@ -13,7 +13,7 @@ const DeleteMovieModal = ({ isDeleteModalOpen, selectedMovie, setIsDeleteModalOp
 
   const onFinish = async () => {
     try {
-      //dispatch(showLoading());
+      dispatch(showLoading());
       let response = null;
       response = await deleteMovie(selectedMovie);
       getData();
@@ -22,9 +22,9 @@ const DeleteMovieModal = ({ isDeleteModalOpen, selectedMovie, setIsDeleteModalOp
         setIsDeleteModalOpen(false);
 
       } 
-      //dispatch(hideLoading());
+      dispatch(hideLoading());
     } catch (err) {
-      //dispatch(hideLoading());
+      dispatch(hideLoading());
       message.error(err.message);
     }
   };

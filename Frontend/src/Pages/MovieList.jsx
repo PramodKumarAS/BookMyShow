@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Button, Table } from "antd";
-// import MovieForm from "./MovieForm";
-//import { hideLoading, showLoading } from "../Redux/loaderSlice";
+import { hideLoading, showLoading } from "../Redux/loaderSlice";
 import { getAllMovies } from "../API/movies";
-//import { useDispatch } from "react-redux";
-// import moment from "moment";
+import { useDispatch } from "react-redux";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import MovieForm from "./MovieForm";
 import DeleteMovieModal from "./DeleteMovieModal";
@@ -19,10 +17,10 @@ function MovieList() {
 
   const [formType, setFormType] = useState("add");
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  //const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
   const getData = async () => {
-    //dispatch(showLoading());
+    dispatch(showLoading());
     const response = await getAllMovies();
     const allMovies = response.movies;
     setMovies(
@@ -30,7 +28,7 @@ function MovieList() {
         return { ...item, key: `movie${item._id}` };
       })
     );
-    //dispatch(hideLoading());
+    dispatch(hideLoading());
   };
 
   const tableHeadings = [

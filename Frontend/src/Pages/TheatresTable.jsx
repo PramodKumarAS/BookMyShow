@@ -1,16 +1,16 @@
 import { useState, useEffect } from 'react';
 import { getAllTheatres, updateTheatre } from '../API/theatre';
-//import { showLoading, hideLoading } from '../Redux/loaderSlice';
-//import { useDispatch } from 'react-redux';
+import { showLoading, hideLoading } from '../Redux/loaderSlice';
+import { useDispatch } from 'react-redux';
 import { message, Button, Table } from 'antd';
 
 const TheatresTable = () => {
     const [theatres, setTheatres] = useState([]);
-    //const dispatch = useDispatch();
+    const dispatch = useDispatch();
 
     const getData = async () => {
         try{
-          //dispatch(showLoading());
+          dispatch(showLoading());
           const response = await getAllTheatres();
           if(response.success){
             const allTheatres = response.allTheatres;
@@ -22,10 +22,10 @@ const TheatresTable = () => {
           }else{
             message.error(response.message)
           }
-          //dispatch(hideLoading())
+          dispatch(hideLoading())
   
         }catch(err){
-          //dispatch(hideLoading());
+          dispatch(hideLoading());
           console.error("API Error", err);
           message.error(err.message);
         }
@@ -33,7 +33,7 @@ const TheatresTable = () => {
 
       const handleStatusChange = async (theatre) => {
         try{
-          //dispatch(showLoading);
+          dispatch(showLoading);
           let values = {...theatres, _id: theatre._id, isActive: !theatre.isActive}
           const response = await updateTheatre(values);
 
@@ -41,9 +41,9 @@ const TheatresTable = () => {
             message.success(response.message);
             getData();
           }
-          //dispatch(hideLoading);
+          dispatch(hideLoading);
         }catch(err){
-          //dispatch(hideLoading);
+          dispatch(hideLoading);
           message.error(err.message);
         }
       }

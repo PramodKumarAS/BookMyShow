@@ -1,157 +1,127 @@
 import React from "react";
 import { Button, Form, Input, message, Radio } from "antd";
-import { Link, useNavigate } from "react-router-dom"
-import {registerUser} from '../API/user'
+import { UserOutlined, MailOutlined, LockOutlined } from "@ant-design/icons";
+import { Link, useNavigate } from "react-router-dom";
+import { registerUser } from "../API/user";
+import "../Register.css";
 
 function Register() {
   const [messageApi, contextHolder] = message.useMessage();
-  const navigate = useNavigate()
-
+  const navigate = useNavigate();
 
   const onFinishRegisterForm = async (values) => {
-    const {isAdmin, isPartner, ...restValues } = values
+    const { isAdmin, isPartner, ...restValues } = values;
 
-    if(isAdmin) {
-      restValues.role = "Admin"
-    }
-
-    if(isPartner) {
-      restValues.role = "Partner"
-    }
+    if (isAdmin) restValues.role = "Admin";
+    if (isPartner) restValues.role = "Partner";
 
     try {
-      const response = await registerUser(restValues)
-      
-      console.log({ response })
-      if(response.success) {
-        console.log("We are inside")
-        messageApi.success("User registration is successful!")
-        navigate("/login")
+      const response = await registerUser(restValues);
+
+      if (response.success) {
+        messageApi.success("User registration is successful!");
+        navigate("/login");
+      } else if (response.userPresentError) {
+        messageApi.error("Email is already taken!");
       } else {
-        messageApi.error("Something went wrong!")
+        messageApi.error("Something went wrong!");
       }
     } catch (error) {
-      if(response.userPresentError) {
-        messageApi.error("Email is already taken!!")
-      } else {
-        messageApi.error("Something went wrong!")
-        console.log("error", error)
-      }
+      console.error("error", error);
+      messageApi.error("Something went wrong! Please try again.");
     }
-  } 
+  };
 
   return (
     <>
       {contextHolder}
       <header className="App-header">
-        <main className="main-area mw-500 text-center px-3">
+        <main className="main-area">
           <section className="left-section">
             <h1>Register to BookMyShow</h1>
+            <p>Create your account in just a few steps</p>
           </section>
 
           <section className="right-section">
-            <Form onFinish={onFinishRegisterForm} layout="vertical">
+            <Form layout="vertical" onFinish={onFinishRegisterForm}>
+              {/* Name */}
               <Form.Item
-                label="Name"
-                htmlFor="name"
+                label="Full Name"
                 name="name"
-                className="d-block"
                 rules={[{ required: true, message: "Name is required" }]}
               >
                 <Input
-                  id="name"
-                  type="text"
-                  placeholder="Enter your name"
-
-                ></Input>
+                  placeholder="Enter your full name"
+                  prefix={<UserOutlined />}
+                />
               </Form.Item>
 
+              {/* Email */}
               <Form.Item
                 label="Email"
-                htmlFor="email"
                 name="email"
-                className="d-block"
                 rules={[{ required: true, message: "Email is required" }]}
               >
                 <Input
-                  id="email"
-                  type="text"
-                  placeholder="Enter your Email"
-
-                ></Input>
+                  placeholder="Enter your email"
+                  prefix={<MailOutlined />}
+                />
               </Form.Item>
 
+              {/* Password */}
               <Form.Item
                 label="Password"
-                htmlFor="password"
                 name="password"
-                className="d-block"
                 rules={[{ required: true, message: "Password is required" }]}
               >
-                <Input
-                  id="password"
-                  type="password"
-                  placeholder="Enter your Password"
-
-                ></Input>
+                <Input.Password
+                  placeholder="Enter your password"
+                  prefix={<LockOutlined />}
+                />
               </Form.Item>
 
+              {/* Admin Role */}
               <Form.Item
                 label="Register as an Admin?"
-                htmlFor="isAdmin"
                 name="isAdmin"
-                className="d-block text-center"
                 initialValue={false}
                 rules={[{ required: true, message: "Please select an option!" }]}
               >
-                <div className="d-flex justify-content-start">
-               
-                  <Radio.Group
-                    name="radiogroup"
-                    className="flex-start"
-                  >
-                    <Radio value={'partner'}>Yes</Radio>
-                    <Radio value={'user'}>No</Radio>
-                  </Radio.Group>
-                </div>
+                <Radio.Group>
+                  <Radio value="partner">Yes</Radio>
+                  <Radio value="user">No</Radio>
+                </Radio.Group>
               </Form.Item>
 
+              {/* Partner Role */}
               <Form.Item
-                label="Register as a Partner"
-                htmlFor="isPartner"
+                label="Register as a Partner?"
                 name="isPartner"
-                className="d-block text-center"
                 initialValue={false}
                 rules={[{ required: true, message: "Please select an option!" }]}
               >
-                <div className="d-flex justify-content-start">
-               
-                  <Radio.Group
-                    name="radiogroup"
-                    className="flex-start"
-                  >
-                    <Radio value={'partner'}>Yes</Radio>
-                    <Radio value={'user'}>No</Radio>
-                  </Radio.Group>
-                </div>
+                <Radio.Group>
+                  <Radio value="partner">Yes</Radio>
+                  <Radio value="user">No</Radio>
+                </Radio.Group>
               </Form.Item>
 
-              <Form.Item className="d-block">
+              {/* Submit */}
+              <Form.Item>
                 <Button
                   type="primary"
                   block
                   htmlType="submit"
-                  style={{ fontSize: "1rem", fontWeight: "600" }}
+                  className="ant-btn-modern"
                 >
                   Register
                 </Button>
               </Form.Item>
             </Form>
-            <div>
-              <p>
-                Already a user? <Link to="/login">Login now</Link>
-              </p>
-            </div>
+
+            <p>
+              Already a user? <Link to="/login">Login now</Link>
+            </p>
           </section>
         </main>
       </header>

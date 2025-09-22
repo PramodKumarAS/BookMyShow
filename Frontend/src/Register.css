@@ -1,0 +1,142 @@
+.App-header {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #6a11cb, #2575fc);
+  padding: 2rem;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.main-area {
+  width: 100%;
+  max-width: 450px;
+  background: #fff;
+  border-radius: 16px;
+  padding: 2.5rem 2rem;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+  animation: fadeInUp 0.8s ease forwards;
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.left-section h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #2575fc;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.left-section p {
+  font-size: 0.95rem;
+  color: #666;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+/* Form inputs */
+.ant-input,
+.ant-input-password input {
+  border-radius: 12px;
+  padding: 12px 12px 12px 40px; /* space for icon */
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+}
+
+.ant-input:focus,
+.ant-input-password input:focus {
+  border-color: #2575fc;
+  box-shadow: 0 0 8px rgba(37, 117, 252, 0.3);
+}
+
+.ant-form-item-label > label {
+  font-weight: 600;
+  color: #222;
+}
+
+/* Button */
+.ant-btn-modern {
+  background: linear-gradient(135deg, #6a11cb, #2575fc);
+  border-radius: 12px;
+  height: 48px;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.ant-btn-modern:hover {
+  transform: scale(1.03);
+  box-shadow: 0 6px 12px rgba(37, 117, 252, 0.3);
+}
+
+/* Radio buttons */
+.ant-radio-wrapper {
+  color: #222;
+}
+
+/* Footer link */
+.right-section p {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: #555;
+  text-align: center;
+}
+
+.right-section p a {
+  color: #2575fc;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.right-section p a:hover {
+  color: #6a11cb;
+  text-decoration: underline;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 480px) {
+  .main-area {
+    padding: 1.5rem 1rem;
+  }
+  .left-section h1 {
+    font-size: 1.5rem;
+  }
+  .ant-input,
+  .ant-input-password input {
+    padding: 10px 10px 10px 36px;
+  }
+  .ant-btn-modern {
+    height: 42px;
+    font-size: 0.95rem;
+  }
+}
+/* Force labels inside the form to be dark */
+.right-section .ant-form-item-label > label {
+  font-weight: 600;
+  color: #222 !important; /* dark text for labels */
+}
+
+/* Input text */
+.right-section .ant-input,
+.right-section .ant-input-password input {
+  color: #222 !important; /* dark text inside inputs */
+}
+
+/* Placeholder text */
+.right-section .ant-input::placeholder,
+.right-section .ant-input-password input::placeholder {
+  color: #999 !important; /* lighter for placeholder */
+}
+
+/* Radio button text */
+.right-section .ant-radio-wrapper {
+  color: #222 !important;
+}

@@ -1,31 +1,31 @@
 import { useEffect, useState } from "react";
-//import { hideLoading, showLoading } from "../Redux/loaderSlice";
-//import { useDispatch, useSelector } from "react-redux";
+import { hideLoading, showLoading } from "../Redux/loaderSlice";
+import { useDispatch, useSelector } from "react-redux";
 import { getAllMovies } from "../API/movies";
 import { message, Row, Col, Input } from "antd";
 import { useNavigate } from "react-router-dom";
 import { SearchOutlined } from "@ant-design/icons";
 
 const User = () => {
-  //const user = useSelector((state) => state.users);
+  const user = useSelector((state) => state.users);
   const [movies, setMovies] = useState(null);
   const [searchText, setSearchText] = useState("");
-  //const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const getData = async () => {
     try {
-      //dispatch(showLoading());
+      dispatch(showLoading());
       const response = await getAllMovies();
       if (response.success) {
         setMovies(response.movies);
       } else {
         message.error(response.message);
       }
-      //dispatch(hideLoading());
+      dispatch(hideLoading());
     } catch (err) {
       message.error(err.message);
-      //dispatch(hideLoading());
+      dispatch(hideLoading());
     }
   };
 

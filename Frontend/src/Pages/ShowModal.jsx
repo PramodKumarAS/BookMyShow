@@ -1,31 +1,12 @@
-import {
-    Col,
-    Modal,
-    Row,
-    Form,
-    Input,
-    Button,
-    Select,
-    Table,
-    message,
-  } from "antd";
-  import { showLoading, hideLoading } from "../Redux/loaderSlice";
-  import { useDispatch } from "react-redux";
-  import {
-    ArrowLeftOutlined,
-    EditOutlined,
-    DeleteOutlined,
-  } from "@ant-design/icons";
-  import { useEffect, useState } from "react";
-  import { getAllMovies } from "../API/movies";
-  import {
-    addShow,
-    deleteShow,
-    getShowsByTheatre,
-    updateShow,
-  } from "../API/show";
+import { Col,Modal,Row,Form,Input,Button,Select,Table,message,} from "antd";
+import { showLoading, hideLoading } from "../Redux/loaderSlice";
+import { useDispatch } from "react-redux";
+import { ArrowLeftOutlined,EditOutlined,DeleteOutlined,} from "@ant-design/icons";
+import { useEffect, useState } from "react";
+import { getAllMovies } from "../API/movies";
+import { addShow,deleteShow,getShowsByTheatre, updateShow} from "../API/show";
   
-  const ShowModal = ({
+const ShowModal = ({
     isShowModalOpen,
     setIsShowModalOpen,
     selectedTheatre,

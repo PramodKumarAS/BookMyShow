@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Button, message} from 'antd';
-//import DeleteTheatreModal from './DeleteTheatreModal';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { getAllTheatres, getTheatresByOwner } from '../API/theatre';
 import { useSelector, useDispatch } from 'react-redux';
 import { showLoading, hideLoading } from '../Redux/loaderSlice';
 import TheatreFormModal from './TheatreFormModal';
-//import ShowModal from './ShowModal';
 import { useNavigate } from 'react-router';
 import DeleteTheatreModal from './DeleteTheatreModal';
 import ShowModal from './ShowModal';
