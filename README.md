@@ -12,7 +12,20 @@ https://bookmyshow0101.netlify.app/login
 - 🏟 Seat selection and ticket booking
 - 💳 Payment gateway integration (dummy/real depending on setup)
 - 📱 Responsive UI for desktop and mobile
-- 📊 Admin panel (add/manage movies, theaters, shows)
+
+### 🛠 Admin (Roles)
+- 🎬 Add movies to the platform  
+- ✅ Approve or ❌ Block partner theaters  
+
+### 🤝 Partner (Roles)
+- 🏟 Add theaters  
+- 📅 Add shows to the movies **approved/added by Admin**  
+
+### 👤 User (Roles)
+- 🎟 Book shows by selecting:
+  - Movie  
+  - Theatre  
+  - Show timing  
 
 ---
 
