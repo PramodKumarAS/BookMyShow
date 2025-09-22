@@ -39,15 +39,15 @@ This project allows users to browse movies, view details, select seats, and book
 
 ### 1️⃣ Clone the repository
 ```bash
-git clone https://github.com/your-username/bookmyshow-clone.git
-cd bookmyshow-clone
+git clone [https://github.com/your-username/bookmyshow-clone.git](https://github.com/PramodKumarAS/BookMyShow.git)
+cd BookMyShow
 
 # Install server dependencies
-cd backend
+cd Backend
 npm install
 
 # Install client dependencies
-cd frontend
+cd Frontend
 npm install
 
 3️⃣ Setup environment variables
@@ -59,12 +59,12 @@ JWT_SECRET=your_jwt_secret
 PAYMENT_KEY=your_payment_gateway_key 
 
 4️⃣ Run the project
-# Start backend
-cd server
+# Start Backend
+cd Backed
 npm run dev
 
-# Start frontend
-cd ../client
+# Start Frontend
+cd Frontend
 npm start
 
 
