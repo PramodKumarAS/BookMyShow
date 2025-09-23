@@ -36,50 +36,57 @@ bookingRouter.post('/make-payment',authMiddleware, async (req, res) => {
 });
 
 
-bookingRouter.post('/book-show',authMiddleware,async (req, res) => {
-    try {
-        const { show, user, seats, transactionId } = req.body;
+bookingRouter.post('/book-show', authMiddleware, async (req, res) => {
+  try {
+    const { show, user, seats, transactionId } = req.body;
 
-        if (!transactionId) {
-            return res.status(400).send({
-                success: false,
-                message: "Missing transactionId in booking request."
-            });
-        }
-
-        const newBooking = new Booking({ show, user, seats, transactionId });
-        await newBooking.save();
-
-        const showData = await Show.findById(show).populate("movie").populate("theatre");
-        const updatedBookedSeats = [...showData.bookedSeats, ...seats];
-        await Show.findByIdAndUpdate(show, { bookedSeats: updatedBookedSeats });
-
-        res.send({
-                success: true,
-                message: "Booking successful!",
-                data: newBooking
-        });
-
-        const userData = await UserModel.findById(user);
-      
-        await emailHelper("ticket.html", userData.email, {
-            name: userData.name,
-            movie: showData.movie.movieName,
-            theatre: showData.theatre.name,
-            date: showData.date,
-            time: showData.time,
-            seats,
-            amount: seats.length * showData.ticketPrice,
-            transactionId
-        });
-        
-    } catch (err) {
-        res.send({
-            success: false,
-            message: err.message
-        });
+    if (!transactionId) {
+      return res.status(400).send({
+        success: false,
+        message: "Missing transactionId in booking request."
+      });
     }
+
+    // Cleanup old shows/bookings before adding new one
+    const pastShows = await Show.find({ date: { $lt: new Date() } }).distinct("_id");
+    await Booking.deleteMany({ show: { $in: pastShows } });
+    await Show.updateMany({ _id: { $in: pastShows } }, { $set: { bookedSeats: [] } });
+
+    // New booking
+    const newBooking = new Booking({ show, user, seats, transactionId });
+    await newBooking.save();
+
+    const showData = await Show.findById(show).populate("movie").populate("theatre");
+    const updatedBookedSeats = [...showData.bookedSeats, ...seats];
+    await Show.findByIdAndUpdate(show, { bookedSeats: updatedBookedSeats });
+
+    res.send({
+      success: true,
+      message: "Booking successful!",
+      data: newBooking
+    });
+
+    const userData = await UserModel.findById(user);
+
+    await emailHelper("ticket.html", userData.email, {
+      name: userData.name,
+      movie: showData.movie.movieName,
+      theatre: showData.theatre.name,
+      date: showData.date,
+      time: showData.time,
+      seats,
+      amount: seats.length * showData.ticketPrice,
+      transactionId
+    });
+
+  } catch (err) {
+    res.send({
+      success: false,
+      message: err.message
+    });
+  }
 });
+
 
 bookingRouter.get('/get-all-bookings',authMiddleware,async (req, res) => {
     try {

@@ -45,7 +45,6 @@ const SingleMovie = () => {
         try{
             dispatch(showLoading());
             const response = await getAllTheatresByMovie({movie: params.id, date});
-            console.log("theatres",response)
 
             if(response.success){
                 setTheatres(response.data);

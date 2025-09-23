@@ -25,13 +25,13 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: rgb(0, 0, 0); /* dark overlay */
+  background: rgb(40, 38, 38); /* dark overlay */
   backdrop-filter: blur(12px);
 }
 
 /* Glassmorphism Login Box */
 .login-box {
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(231, 229, 229, 0.12);
   padding: 2.5rem;
   border-radius: 16px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
@@ -123,6 +123,10 @@
 }
 /* Softer grayish-white form labels */
 .ant-form-item-label > label {
-  color: rgba(255, 255, 255, 0.8) !important;
   font-weight: 500;
 }
+
+.login-box .ant-form-item-label > label {
+    color: white; /* label text */
+}
+

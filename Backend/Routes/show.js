@@ -39,16 +39,46 @@ showRouter.post('/update-show',authMiddleware, async (req, res) => {
 
 });
 
-showRouter.post('/get-all-shows-by-theatre',authMiddleware,  async (req, res) => {
-
+showRouter.post('/get-all-shows-by-theatre', authMiddleware, async (req, res) => {
   try {
-    const shows = await showModels.find({ theatre: req.body.theatreId }).populate(
-      "movie"
+    // 1️⃣ Current time in IST
+    const now = new Date();
+    const istOffsetMs = (5 * 60 + 30) * 60 * 1000; // 5:30 hours in milliseconds
+    const nowIST = new Date(now.getTime() + istOffsetMs);
+
+    // 2️⃣ Start of today in IST
+    const todayIST = new Date(
+      nowIST.getFullYear(),
+      nowIST.getMonth(),
+      nowIST.getDate(),
+      0, 0, 0, 0
     );
+
+    // 3️⃣ Update only past shows to today's date and clear bookedSeats
+    await showModels.updateMany(
+      { date: { $lt: todayIST } }, // only shows in the past
+      { $set: { date: todayIST, bookedSeats: [] } }
+    );
+
+    // 4️⃣ Fetch shows for today/future only (IST)
+    const shows = await showModels.find({
+      theatre: req.body.theatreId,
+      date: { $gte: todayIST }
+    }).populate("movie");
+
+    // 5️⃣ Convert dates to IST string (YYYY-MM-DD) for frontend
+    const showsWithIST = shows.map(show => {
+      const istDate = new Date(show.date.getTime() + istOffsetMs);
+      return {
+        ...show.toObject(),
+        date: istDate.toISOString().split("T")[0]
+      };
+    });
+
     res.send({
       success: true,
-      message: "All shows fetched",
-      data: shows,
+      message: "All shows fetched (past shows updated to today IST)",
+      data: showsWithIST,
     });
   } catch (err) {
     res.send({
@@ -56,8 +86,9 @@ showRouter.post('/get-all-shows-by-theatre',authMiddleware,  async (req, res) =>
       message: err.message,
     });
   }
-
 });
+
+
 
 showRouter.post('/get-all-theatres-by-movie',authMiddleware,  async (req, res) => {
 

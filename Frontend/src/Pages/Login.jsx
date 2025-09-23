@@ -87,7 +87,8 @@ export default function Login() {
             <Form.Item
               name="email"
               label="Email"
-              rules={[{ required: true, message: "Please enter your email!" }]}
+              className="login-input"
+              rules={[{ required: true, message: "Please enter your email!" }]} 
             >
                 <Input
                   placeholder="Enter your email"
@@ -97,6 +98,7 @@ export default function Login() {
             <Form.Item
               name="password"
               label="Password"
+              className="login-input"
               rules={[{ required: true, message: "Please enter your password!" }]}
             >
               <Input.Password placeholder="Enter your password" />

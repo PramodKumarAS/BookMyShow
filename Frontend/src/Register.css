@@ -46,7 +46,6 @@
 .ant-input,
 .ant-input-password input {
   border-radius: 12px;
-  padding: 12px 12px 12px 40px; /* space for icon */
   font-size: 0.95rem;
   transition: all 0.3s ease;
 }
