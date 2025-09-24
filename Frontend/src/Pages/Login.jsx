@@ -83,15 +83,18 @@ export default function Login() {
             🎬 BookMyShow
           </Title>
           <Form layout="vertical" onFinish={onFinishLoginForm} autoComplete="off">
-            <Form.Item
-              name="email"
-              label="Email"
-              className="login-input"
-              rules={[{ required: true, message: "Please enter your email!" }]} 
-            >
-                <Input
-                  placeholder="Enter your email"
-                />            </Form.Item>
+      
+          <Form.Item
+            name="email"
+            label="Email"
+            className="login-input"
+            rules={[
+              { required: true, message: "Please enter your email!" },
+              { type: "email", message: "Please enter a valid email!" }
+            ]}
+          >
+            <Input placeholder="Enter your email" />
+          </Form.Item>
 
             <Form.Item
               name="password"
