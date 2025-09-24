@@ -4,7 +4,6 @@ import { Button, Form, Input, message, Typography } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import { loginUser } from "../API/user";
 import { jwtDecode } from "jwt-decode";
-import { UserOutlined, MailOutlined, LockOutlined } from "@ant-design/icons";
 
 const { Title } = Typography;
 
@@ -81,7 +80,7 @@ export default function Login() {
       <div className="login-center">
         <div className="login-box">
           <Title level={2} className="login-title">
-            🎬 BookMyShow Login
+            🎬 BookMyShow
           </Title>
           <Form layout="vertical" onFinish={onFinishLoginForm} autoComplete="off">
             <Form.Item
@@ -92,7 +91,6 @@ export default function Login() {
             >
                 <Input
                   placeholder="Enter your email"
-                  prefix={<MailOutlined />}
                 />            </Form.Item>
 
             <Form.Item
