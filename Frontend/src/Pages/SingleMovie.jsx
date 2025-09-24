@@ -95,22 +95,27 @@ const SingleMovie = () => {
                                 <p>{theatre.address}</p>                            
                             </Col>  
                             <Col xs={{span: 24}} lg={{span: 16}}>
-                                <Button type="primary"
-                                        shape="round"
-                                        size="middle"
-                                        style={{
-                                        background: "linear-gradient(90deg, #ff512f, #dd2476)",
-                                        border: "none",
-                                        boxShadow: "0 3px 6px rgba(0,0,0,0.3)",
-                                        fontWeight: 500,
-                                        }}>
-                                    {
-                                        theatre.shows.sort((a, b) => moment(a.time, "HH:mm") - moment(b.time, "HH:mm"))
-                                        .map((singleShow => {
-                                            return <li key={singleShow._id} onClick={() => navigate(`/book-show/${singleShow._id}`)} >Book Show - {moment(singleShow.time, "HH:mm").format("hh:mm A")}</li>
-                                        }))
-                                    }                                    
-                                </Button>
+                            <Button type="primary"
+                                    shape="round"
+                                    size="middle"
+                                    style={{
+                                    background: "linear-gradient(90deg, #ff512f, #dd2476)",
+                                    border: "none",
+                                    boxShadow: "0 3px 6px rgba(0,0,0,0.3)",
+                                    fontWeight: 500,
+                                    }}>
+                                {theatre.shows
+                                .sort((a, b) => moment(a.time, "HH:mm") - moment(b.time, "HH:mm"))
+                                .map(singleShow => (
+                                    <div 
+                                    key={singleShow._id} 
+                                    onClick={() => navigate(`/book-show/${singleShow._id}`)}
+                                    style={{ cursor: "pointer", padding: "5px 0" }}
+                                    >
+                                    Book Show - {moment(singleShow.time, "HH:mm").format("hh:mm A")}
+                                    </div>
+                                ))}
+                            </Button>
                             </Col>
                         </Row>
                         <Divider />

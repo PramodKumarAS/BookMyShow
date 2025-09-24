@@ -40,7 +40,7 @@ const User = () => {
   return (
     <>
       <Row className="justify-content-center w-100">
-        <Col xs={{ span: 24 }} lg={{ span: 12 }}>
+        <Col xs={24} lg={12}>
           <Input
             placeholder="Type here to search for movies"
             onChange={handleSearch}
@@ -51,6 +51,7 @@ const User = () => {
           <br />
         </Col>
       </Row>
+
       <Row
         className="justify-content-center"
         gutter={{
@@ -63,27 +64,26 @@ const User = () => {
         {movies &&
           movies
             .filter((movie) =>
-             // The ?. operator is called optional chaining operator
-             // movie.movieName is null and we call toLowerCase()
-             // shorthand of saying (if movie.movieName) {movie.movieName?.toLowerCase(....}
-              movie.movieName?.toLowerCase().includes(searchText.toLowerCase())
+              movie.movieName
+                ?.toLowerCase()
+                .includes(searchText.toLowerCase())
             )
             .map((movie) => (
               <Col
                 className="gutter-row mb-5"
                 key={movie._id}
-                span={{
-                  xs: 24,
-                  sm: 24,
-                  md: 12,
-                  lg: 10,
-                }}
+                xs={24}   // full width on extra small screens
+                sm={12}   // 2 per row on small screens
+                md={8}    // 3 per row on medium screens
+                lg={6}    // 4 per row on large screens
               >
                 <div className="text-center">
                   <img
                     onClick={() => {
                       navigate(
-                        `/movie/${movie._id}?date=${(new Date()).toISOString().split('T')[0]}`
+                        `/movie/${movie._id}?date=${new Date()
+                          .toISOString()
+                          .split("T")[0]}`
                       );
                     }}
                     className="cursor-pointer object-cover"
@@ -96,7 +96,9 @@ const User = () => {
                   <h3
                     onClick={() => {
                       navigate(
-                        `/movie/${movie._id}?date=${(new Date()).toISOString().split('T')[0]}`
+                        `/movie/${movie._id}?date=${new Date()
+                          .toISOString()
+                          .split("T")[0]}`
                       );
                     }}
                     className="cursor-pointer"
