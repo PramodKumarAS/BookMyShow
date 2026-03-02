@@ -64,7 +64,7 @@ movieRouter.get('/get-all-movies',authMiddleware, async(req,res)=>{
     try {
         const movies = await movieModels.find();
 
-        res.send({
+        res.status(200).send({
             success: true,
             message: "Movies fetched!",
             movies
