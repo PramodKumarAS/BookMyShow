@@ -199,7 +199,7 @@ userRouter.post('/resetpassword',async function (req, res) {
         // OTP is within validaity period
         // Now we need to update the user with the password
 
-        const salt = await bcrypt.genSalt(SALT_ROUNDS)
+        const salt = 10
         const hashedPassword = await bcrypt.hash(req.body.password, salt)
 
         user.password = hashedPassword
