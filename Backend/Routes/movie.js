@@ -13,6 +13,7 @@ movieRouter.post('/add-movie',authMiddleware,async(req,res)=>{
         res.status(200).json({
             success:true,
             message:"Movie is added",
+            movie 
         });
     } catch (error) {
         res.status(500).send({
