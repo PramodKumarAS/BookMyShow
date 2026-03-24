@@ -105,69 +105,42 @@ userRouter.get('/get-currentUser',authMiddleware, async (req, res) => {
     }
 });
 
-userRouter.post('/forgetpassword',async function (req, res) {
+userRouter.post('/forgetpassword', async function (req, res) {
     try {
-        /****
-                * 1. You can ask for email
-                * 2. check if email is present or not
-                *  * if email is not present -> send a response to the user(user not found)
-                * 3. if email is present -> create basic otp -> and send to the email 
-                * 4. also store that otp -> in the userModel
-                * 5. to avoid that collison
-                *      response -> unique url with id of the user and that will form your reset password 
-                * 
-                * ***/
-        if (req.body.email == undefined) {
-            return res.status(401).json({
-                status: "failure",
-                message: "Please enter the email for forget Password"
-            })
-        }
-        // find the user -> going db -> getting it for the server
-        let user = await userModel.findOne({ email: req.body.email });
+        const { email } = req.body;
 
-        // If user is not present, then we can't reset password
-        if (user == null) {
-            return res.status(404).json({
-                status: "failure",
-                message: "user not found for this email"
-            })
+        if (!email) {
+            return res.status(400).json({
+                success: false,
+                message: "Email is required"
+            });
         }
 
-        // got the user -> on your server
-        const otp = otpGenerator();
+        const user = await userModel.findOne({ email });
 
-        // Check if this OTP is present in the OTPTable
-        // Maybe use a while loop while here
+        if (user) {
+            const otp = otpGenerator();
 
+            user.otp = otp;
+            user.otpExpiry = Date.now() + 10 * 60 * 1000;
+            await user.save();
 
-        // Alternative
-        // Before saving OTP< check if OTP is present for any user
-        // UserModel.findOne({ otp: otp });
-
-
-        user.otp = otp;
-        user.otpExpiry = Date.now() + 10 * 60 * 1000;
-        // those updates will be send to the db
-        await user.save();
-        res.status(200).json({
-            status: "success",
-            message: "otp sent to your email",
-        });
-        // send the mail to there email -> otp
-        await emailHelper(
-            "otp.html"
-            , user.email,
-            {
+            await emailHelper("otp.html", user.email, {
                 name: user.name,
                 otp: otp
             });
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: "If the email exists, an OTP has been sent"
+        });
+
     } catch (err) {
-        console.log({ err })
-        res.status(500).json({
-            message: err.message,
-            status: "failure"
-        })
+        return res.status(500).json({
+            success: false,
+            message: err.message || "Internal Server Error"
+        });
     }
 });
 
