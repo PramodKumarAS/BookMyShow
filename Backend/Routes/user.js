@@ -4,6 +4,7 @@ const userRouter =  express.Router();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const authMiddleware = require("../Middleware/authMiddleware");
+const emailHelper = require('../Config/emailHelper');
 
 const otpGenerator = function () {
     return Math.floor((Math.random() * 10000) + 90000);
