@@ -18,13 +18,7 @@ userRouter.post('/register', async (req, res) => {
         if (!email || !email.toLowerCase().endsWith("@gmail.com")) {
             return res.status(400).json({
                 success: false,
-                message: "Invalid email domain",
-                errors: [
-                    {
-                        field: "email",
-                        message: "Only @gmail.com emails are allowed"
-                    }
-                ]
+                message: "Invalid email domain"
             });
         }
 
