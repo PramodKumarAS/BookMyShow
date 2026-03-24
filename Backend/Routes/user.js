@@ -9,24 +9,42 @@ const otpGenerator = function () {
     return Math.floor((Math.random() * 10000) + 90000);
 }
 
-userRouter.post('/register',async(req,res)=>{
+userRouter.post('/register', async (req, res) => {
     try {
         const userDetail = req.body;
-        const hashedPassword =await hashPassword(userDetail.password);
+        const email = userDetail.email;
 
-        const user =  new userModel(userDetail);
+        // ✅ Validate Gmail domain
+        if (!email || !email.toLowerCase().endsWith("@gmail.com")) {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid email domain",
+                errors: [
+                    {
+                        field: "email",
+                        message: "Only @gmail.com emails are allowed"
+                    }
+                ]
+            });
+        }
+
+        const hashedPassword = await hashPassword(userDetail.password);
+
+        const user = new userModel(userDetail);
         user.password = hashedPassword;
+
         await user.save();
 
-        res.status(200).json({
-            success:true,
-            message:"Registration is successfull",
+        return res.status(200).json({
+            success: true,
+            message: "Registration is successful",
         });
+
     } catch (error) {
-        res.status(500).json({
-            success:false, 
-            message:"Internal server error",
-        })        
+        return res.status(500).json({
+            success: false,
+            message: "Internal server error",
+        });
     }
 });
 
