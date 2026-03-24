@@ -42,41 +42,36 @@ userRouter.post('/register', async (req, res) => {
     }
 });
 
-userRouter.post('/login',async (req,res)=>{
+userRouter.post('/login', async (req, res) => {
+    try {
+        const { email, password } = req.body;
 
-    try {       
-        const userDetail = req.body;
-    
-        const user = await userModel.findOne({email:userDetail.email});
-        
-        if(!user){
-            return res.status(404).json({ success: false, message: "No user found" });
-        }
-        
-        const isPasswordValid =await verifyPassword(req.body.password,user.password);
-        if (!isPasswordValid) {
-            return res.status(404).send({ 
-                success: false, 
-                message: "No user/pass combo found" 
+        const user = await userModel.findOne({ email });
+
+        if (!user || !(await verifyPassword(password, user.password))) {
+            return res.status(401).json({
+                success: false,
+                message: "Invalid email or password"
             });
         }
 
         const token = jwt.sign(
-        { userId: user._id, role: user.role }, // ✅ Include role here
-        process.env.JWT_SECRET,
-        { expiresIn: "1h" }
+            { userId: user._id, role: user.role },
+            process.env.JWT_SECRET,
+            { expiresIn: "1h" }
         );
-        
-        res.status(200).json({
-            success:true,
+
+        return res.status(200).json({
+            success: true,
             token,
             message: "Successfully logged in!",
             role: user.role
         });
+
     } catch (error) {
-        res.status(500).json({
-            success: false, 
-            message:error.message || "Internal Server Error!!",
+        return res.status(500).json({
+            success: false,
+            message: error.message || "Internal Server Error"
         });
     }
 });
