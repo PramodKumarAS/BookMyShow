@@ -1,21 +1,35 @@
 const jwt = require("jsonwebtoken");
 
-function authMiddleware(req,res,next){
+function authMiddleware(req, res, next) {
     try {
-        const token = req.headers.authorization.split(" ")[1];
+        const authHeader = req.headers.authorization;
 
-        const verifiedToken = jwt.verify(token,process.env.JWT_SECRET);
+        // ✅ Check header exists
+        if (!authHeader || !authHeader.startsWith("Bearer ")) {
+            return res.status(401).json({
+                success: false,
+                message: "Authorization token missing"
+            });
+        }
 
-        req.userId = verifiedToken.userId;
+        const token = authHeader.split(" ")[1];
 
-        next()
+        const verifiedToken = jwt.verify(token, process.env.JWT_SECRET);
+
+        // ✅ Store full user object
+        req.user = {
+            userId: verifiedToken.userId,
+            role: verifiedToken.role
+        };
+
+        next();
+
     } catch (error) {
-        console.log("Started",error)
-        res.status(401).send({
+        return res.status(401).json({
             success: false,
-            message: "Invalid token! Please try logging in again."
-        })
+            message: "Invalid or expired token"
+        });
     }
 }
 
-module.exports=authMiddleware;
+module.exports = authMiddleware;
