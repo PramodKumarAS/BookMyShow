@@ -12,37 +12,89 @@ const otpGenerator = function () {
 
 userRouter.post('/register', async (req, res) => {
     try {
-        const userDetail = req.body;
-        const email = userDetail.email;
+        const { name, email, password } = req.body;
 
-        // ✅ Validate Gmail domain
-        if (!email || !email.toLowerCase().endsWith("@gmail.com")) {
+        // 🔴 1. Required field validation
+        if (!name || !email || !password) {
             return res.status(400).json({
                 success: false,
-                message: "Invalid email domain"
+                message: "All fields are required"
             });
         }
 
-        const hashedPassword = await hashPassword(userDetail.password);
+        // 🔴 2. Empty / whitespace validation
+        if (!name.trim() || !email.trim() || !password.trim()) {
+            return res.status(400).json({
+                success: false,
+                message: "Fields cannot be empty"
+            });
+        }
 
-        const user = new userModel(userDetail);
-        user.password = hashedPassword;
+        // 🔴 3. Email format validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid email format"
+            });
+        }
+
+        // 🔴 4. Gmail domain validation
+        if (!email.toLowerCase().endsWith("@gmail.com")) {
+            return res.status(400).json({
+                success: false,
+                message: "Only Gmail accounts are allowed"
+            });
+        }
+
+        // 🔴 5. Password strength validation
+        if (password.length < 6) {
+            return res.status(400).json({
+                success: false,
+                message: "Password must be at least 6 characters"
+            });
+        }
+
+        const strongPassword = /^(?=.*[A-Z])(?=.*[!@#$%^&*])/;
+        if (!strongPassword.test(password)) {
+            return res.status(400).json({
+                success: false,
+                message: "Password must contain uppercase and special character"
+            });
+        }
+
+        // 🔴 6. Duplicate user check
+        const existingUser = await userModel.findOne({ email });
+        if (existingUser) {
+            return res.status(409).json({
+                success: false,
+                message: "User already exists"
+            });
+        }
+
+        // 🔐 7. Hash password
+        const hashedPassword = await hashPassword(password);
+
+        // ✅ 8. Create user safely
+        const user = new userModel(req.body);
 
         await user.save();
 
-        return res.status(200).json({
+        // ✅ 9. Correct status code
+        return res.status(201).json({
             success: true,
-            message: "Registration is successful",
+            message: "Registration is successful"
         });
 
     } catch (error) {
+        console.error("Register Error:", error);
+
         return res.status(500).json({
             success: false,
-            message: "Internal server error",
+            message: "Internal server error"
         });
     }
 });
-
 userRouter.post('/login', async (req, res) => {
     try {
         const { email, password } = req.body;
