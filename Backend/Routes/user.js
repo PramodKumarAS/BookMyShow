@@ -77,15 +77,20 @@ userRouter.post('/register', async (req, res) => {
 
         // ✅ 8. Create user safely
         const user = new userModel(req.body);
+        user.password = hashedPassword;
 
         await user.save();
 
         // ✅ 9. Correct status code
         return res.status(201).json({
             success: true,
-            message: "Registration is successful"
+            message: "Registration is successful",
+            data: {
+                userId: user._id,
+                email: user.email,
+                role: user.role
+            }
         });
-
     } catch (error) {
         console.error("Register Error:", error);
 
