@@ -47,6 +47,38 @@ userRouter.post('/login', async (req, res) => {
     try {
         const { email, password } = req.body;
 
+        // 🔴 400 VALIDATIONS
+        if (!email || !password) {
+            return res.status(400).json({
+                success: false,
+                message: "Email and password are required"
+            });
+        }
+
+        if (typeof email !== "string" || typeof password !== "string") {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid data type"
+            });
+        }
+
+        if (!email.trim() || !password.trim()) {
+            return res.status(400).json({
+                success: false,
+                message: "Email and password cannot be empty"
+            });
+        }
+
+        // Basic email format check
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid email format"
+            });
+        }
+
+        // 🔵 ACTUAL AUTH LOGIC
         const user = await userModel.findOne({ email });
 
         if (!user || !(await verifyPassword(password, user.password))) {
