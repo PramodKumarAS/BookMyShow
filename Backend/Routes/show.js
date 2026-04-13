@@ -25,10 +25,11 @@ showRouter.post('/add-show',authMiddleware, async(req,res)=>{
 showRouter.post('/update-show',authMiddleware, async (req, res) => {
 
   try {
-    await showModels.findByIdAndUpdate(req.body.showId, req.body);
+    const updatedShow = await showModels.findByIdAndUpdate(req.body.showId, req.body);
     res.send({
       success: true,
       message: "The show has been updated!",
+      updatedShow
     });
   } catch (err) {
     res.send({
