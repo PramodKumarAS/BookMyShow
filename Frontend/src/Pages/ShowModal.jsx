@@ -152,10 +152,10 @@ const ShowModal = ({
               <Button
                 onClick={() => {
                   setView("edit");
-                  setSelectedMovie(data.movie);
                   setSelectedShow({
                     ...data,
-                    date: (new Date()).toISOString().split('T')[0],
+                    movie: data.movie._id,  
+                    date: (new Date()).toISOString().split('T')[0],//Updating it to today's date
                   });
                 }}
               >
