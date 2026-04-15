@@ -152,7 +152,7 @@ showRouter.post('/get-show-by-id',authMiddleware, async (req, res) => {
 showRouter.post('/delete-show',authMiddleware,async (req, res) => {
 
   try {
-    await Show.findByIdAndDelete(req.body.showId);
+    await showModels.findByIdAndDelete(req.body.showId);
     res.send({
       success: true,
       message: "The show has been deleted!",
