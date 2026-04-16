@@ -10,7 +10,7 @@ function Forget() {
     const onFinish = async (values) => {
         try {
             const response = await forgetPassword(values)
-            if (response.status === "success") {
+            if (response.success === true) {
                 message.success(response.message)
                 alert("OTP sent to your email")
                 window.location.href = '/reset'
