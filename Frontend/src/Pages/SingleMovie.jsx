@@ -104,17 +104,26 @@ const SingleMovie = () => {
                                     boxShadow: "0 3px 6px rgba(0,0,0,0.3)",
                                     fontWeight: 500,
                                     }}>
-                                {theatre.shows
-                                .sort((a, b) => moment(a.time, "HH:mm") - moment(b.time, "HH:mm"))
-                                .map(singleShow => (
-                                    <div 
-                                    key={singleShow._id} 
-                                    onClick={() => navigate(`/book-show/${singleShow._id}`)}
-                                    style={{ cursor: "pointer", padding: "5px 0" }}
-                                    >
-                                    Book Show - {moment(singleShow.time, "HH:mm").format("hh:mm A")}
-                                    </div>
-                                ))}
+                                    {theatre.shows
+                                    .sort((a, b) => moment(a.time, "HH:mm") - moment(b.time, "HH:mm"))
+                                    .map(singleShow => (
+                                        <Button
+                                        key={singleShow._id}
+                                        type="primary"
+                                        shape="round"
+                                        size="middle"
+                                        style={{
+                                            background: "linear-gradient(90deg, #ff512f, #dd2476)",
+                                            border: "none",
+                                            boxShadow: "0 3px 6px rgba(0,0,0,0.3)",
+                                            fontWeight: 500,
+                                            marginRight: "10px"
+                                        }}
+                                        onClick={() => navigate(`/book-show/${singleShow._id}`)}
+                                        >
+                                        Book Show - {moment(singleShow.time, "HH:mm").format("hh:mm A")}
+                                        </Button>
+                                    ))}
                             </Button>
                             </Col>
                         </Row>
