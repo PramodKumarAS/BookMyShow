@@ -32,7 +32,7 @@ const ShowModal = ({
           theatreId: selectedTheatre._id,
         });
         if (showResponse.success) {
-          setShows(showResponse.data);
+          setShows(showResponse.shows);
         } else {
           message.error(showResponse.message);
         }
