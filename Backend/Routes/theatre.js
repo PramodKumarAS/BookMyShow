@@ -84,7 +84,7 @@ theatreRouter.post('/delete-theatre',authMiddleware,async(req,res)=>{
 
       res.status(200).json({
             success: true,
-            message: "Theatre updated!", 
+            message: "Theatre deleted!", 
             deletedTheatre
       });
 
