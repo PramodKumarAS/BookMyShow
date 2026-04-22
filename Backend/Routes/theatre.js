@@ -44,7 +44,7 @@ theatreRouter.get('/get-theatres-ByOwner/:ownerID',authMiddleware, async(req,res
     try {
         const allTheatres =await theatreModels.find({
             owner:req.params.ownerID
-        });
+        }).populate("owner");
 
         res.status(200).json({
             success: true,
